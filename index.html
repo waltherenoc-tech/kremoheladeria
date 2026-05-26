@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KRÉMO – Heladería Artesanal</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FFF8EE;
+    --rose: #F4637A;
+    --mint: #3DCFB6;
+    --lemon: #F9D949;
+    --choco: #3B1F0E;
+    --lavender: #C8A8E9;
+    --peach: #FFB085;
+    --sky: #A8D8EA;
+  }
+ 
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+  html { scroll-behavior: smooth; }
+ 
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--choco);
+    overflow-x: hidden;
+    cursor: none;
+  }
+ 
+  /* Custom cursor */
+  .cursor {
+    width: 20px; height: 20px;
+    background: var(--rose);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.2s, height 0.2s, background 0.2s;
+    mix-blend-mode: multiply;
+  }
+  .cursor.big { width: 50px; height: 50px; background: var(--lemon); }
+ 
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 1.2rem 3rem;
+    display: flex; align-items: center; justify-content: space-between;
+    background: transparent;
+    transition: background 0.3s;
+  }
+  nav.scrolled { background: var(--cream); box-shadow: 0 2px 20px rgba(59,31,14,.08); }
+ 
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem; font-weight: 900;
+    color: var(--choco);
+    text-decoration: none;
+    display: flex; align-items: center; gap: .5rem;
+  }
+  .logo-dot {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--rose);
+    display: inline-block;
+    animation: bounce 1.4s ease-in-out infinite;
+  }
+ 
+  nav ul {
+    list-style: none;
+    display: flex; gap: 2.5rem;
+  }
+  nav ul a {
+    text-decoration: none;
+    color: var(--choco);
+    font-size: .9rem; font-weight: 500;
+    letter-spacing: .03em;
+    position: relative;
+  }
+  nav ul a::after {
+    content: '';
+    position: absolute; bottom: -3px; left: 0; right: 0; height: 2px;
+    background: var(--rose);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform .25s;
+  }
+  nav ul a:hover::after { transform: scaleX(1); }
+ 
+  .nav-btn {
+    background: var(--choco); color: var(--cream);
+    border: none; border-radius: 100px;
+    padding: .55rem 1.4rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .85rem; font-weight: 500;
+    cursor: none;
+    transition: background .2s, transform .15s;
+  }
+  .nav-btn:hover { background: var(--rose); transform: scale(1.04); }
+ 
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 7rem 3rem 4rem;
+    position: relative;
+    overflow: hidden;
+    background: url('https://wlwzooglxpubstgfxvoo.supabase.co/storage/v1/object/sign/icecream/icecream2-ezgif.com.gif?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9hM2VjMmQ4NC1jZTVmLTRiMzItYmRhYy1mODBhZTkwNWI3MzYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpY2VjcmVhbS9pY2VjcmVhbTItZXpnaWYuY29tLmdpZiIsImlhdCI6MTc3OTc1ODAwOCwiZXhwIjoxODExMjk0MDA4fQ.sGBB5Hx7BwDbvcMJc3XIQOwdeGMrPKrExK9fbIBaIOM') center center / cover no-repeat;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: rgba(255, 248, 238, 0.55);
+    backdrop-filter: blur(1px);
+    z-index: 1;
+  }
+ 
+  .hero-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: .5;
+    pointer-events: none;
+  }
+  .blob1 { width: 500px; height: 500px; background: var(--peach); top: -100px; right: -100px; animation: drift 8s ease-in-out infinite alternate; }
+  .blob2 { width: 350px; height: 350px; background: var(--lavender); bottom: 0; left: -80px; animation: drift 10s ease-in-out infinite alternate-reverse; }
+  .blob3 { width: 250px; height: 250px; background: var(--lemon); top: 40%; left: 40%; animation: drift 12s ease-in-out infinite alternate; }
+ 
+  @keyframes drift {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(40px, 30px) scale(1.08); }
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+ 
+  .hero-blob { z-index: 0; }
+ 
+  .hero-text { position: relative; z-index: 2; }
+ 
+  .hero-tag {
+    display: inline-block;
+    background: var(--mint); color: var(--choco);
+    font-size: .78rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase;
+    padding: .35rem 1rem; border-radius: 100px;
+    margin-bottom: 1.5rem;
+    animation: fadeUp .8s both;
+  }
+ 
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    line-height: 1.05;
+    font-weight: 900;
+    animation: fadeUp .9s .1s both;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--rose);
+  }
+ 
+  .hero-sub {
+    margin-top: 1.5rem;
+    font-size: 1.05rem;
+    color: #7a5c4a;
+    max-width: 520px;
+    line-height: 1.7;
+    animation: fadeUp 1s .2s both;
+  }
+ 
+  .hero-actions {
+    margin-top: 2.5rem;
+    display: flex; gap: 1rem; align-items: center; justify-content: center;
+    animation: fadeUp 1s .35s both;
+  }
+ 
+  .btn-primary {
+    background: var(--rose); color: #fff;
+    border: none; border-radius: 100px;
+    padding: .85rem 2rem;
+    font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 500;
+    cursor: none;
+    transition: transform .2s, box-shadow .2s;
+    box-shadow: 0 6px 24px rgba(244,99,122,.35);
+  }
+  .btn-primary:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 12px 32px rgba(244,99,122,.4); }
+ 
+  .btn-ghost {
+    background: none; border: 2px solid var(--choco);
+    color: var(--choco); border-radius: 100px;
+    padding: .75rem 1.8rem;
+    font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 500;
+    cursor: none;
+    transition: background .2s, color .2s;
+  }
+  .btn-ghost:hover { background: var(--choco); color: var(--cream); }
+ 
+  /* Hero visual */
+  .hero-visual {
+    position: relative; z-index: 2;
+    display: flex; justify-content: center; align-items: center;
+  }
+ 
+  .cone-wrap {
+    position: relative;
+    animation: float 3.5s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(-2deg); }
+    50% { transform: translateY(-18px) rotate(2deg); }
+  }
+ 
+  .cone-svg { width: min(360px, 42vw); drop-shadow: 0 20px 40px rgba(0,0,0,.15); }
+ 
+  .badge {
+    position: absolute;
+    background: var(--lemon);
+    border-radius: 50%;
+    width: 90px; height: 90px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: .7rem; font-weight: 700;
+    text-align: center; line-height: 1.2;
+    box-shadow: 0 4px 16px rgba(0,0,0,.12);
+    animation: spin-badge 12s linear infinite;
+  }
+  .badge.b1 { top: 10%; right: -10px; }
+  .badge.b2 { bottom: 15%; left: -20px; background: var(--mint); animation-direction: reverse; }
+  @keyframes spin-badge {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+ 
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+ 
+  /* ─── SABORES STRIP ─── */
+  .strip {
+    background: var(--choco);
+    color: var(--cream);
+    padding: 1rem 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .strip-inner {
+    display: inline-block;
+    animation: marquee 20s linear infinite;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    letter-spacing: .05em;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+  .strip-sep { margin: 0 1.5rem; color: var(--rose); }
+ 
+  /* ─── SECCIÓN SABORES ─── */
+  .section { padding: 6rem 3rem; }
+  .section-header { text-align: center; margin-bottom: 4rem; }
+  .section-label {
+    font-size: .78rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--rose); margin-bottom: .8rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 900; line-height: 1.1;
+  }
+ 
+  .flavors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 2rem;
+    max-width: 1100px; margin: 0 auto;
+  }
+ 
+  .flavor-card {
+    background: #fff;
+    border-radius: 24px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    cursor: none;
+    transition: transform .3s, box-shadow .3s;
+    box-shadow: 0 4px 20px rgba(59,31,14,.07);
+  }
+  .flavor-card:hover { transform: translateY(-8px) rotate(1deg); box-shadow: 0 20px 48px rgba(59,31,14,.14); }
+ 
+  .flavor-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 6px;
+    background: var(--card-color, var(--rose));
+  }
+  .flavor-emoji { font-size: 3.5rem; margin-bottom: 1rem; display: block; }
+  .flavor-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem; font-weight: 700; margin-bottom: .4rem;
+  }
+  .flavor-desc { font-size: .88rem; color: #8a6a58; line-height: 1.6; }
+  .flavor-price {
+    margin-top: 1.2rem;
+    display: inline-block;
+    background: var(--card-color, var(--rose));
+    color: #fff; border-radius: 100px;
+    padding: .3rem .9rem; font-size: .85rem; font-weight: 500;
+  }
+ 
+  /* ─── NOSOTROS ─── */
+  .about {
+    background: var(--choco);
+    color: var(--cream);
+    padding: 6rem 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+  .about-img-stack { position: relative; height: 420px; }
+  .about-img {
+    position: absolute;
+    border-radius: 24px;
+    overflow: hidden;
+    background: var(--card-color);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 5rem;
+  }
+  .about-img.a { width: 260px; height: 300px; top: 0; left: 0; background: var(--peach); }
+  .about-img.b { width: 220px; height: 260px; bottom: 0; right: 0; background: var(--lavender); }
+  .about-img.c {
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    background: var(--lemon);
+    font-size: 2.8rem;
+    border: 6px solid var(--choco);
+    z-index: 2;
+  }
+ 
+  .about-text .section-label { color: var(--mint); }
+  .about-text .section-title { color: var(--cream); margin-bottom: 1.5rem; }
+  .about-text p { color: #c5a98e; line-height: 1.8; margin-bottom: 1rem; }
+ 
+  .stats { display: flex; gap: 3rem; margin-top: 2.5rem; }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem; font-weight: 900;
+    color: var(--lemon);
+  }
+  .stat-label { font-size: .82rem; color: #c5a98e; margin-top: .2rem; }
+ 
+  /* ─── ESPECIALES ─── */
+  .specials { padding: 6rem 3rem; background: var(--lemon); }
+  .specials .section-label { color: var(--choco); opacity: .6; }
+ 
+  .special-cards {
+    display: flex; gap: 2rem; overflow-x: auto; padding-bottom: 1rem;
+    scrollbar-width: none;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .special-cards::-webkit-scrollbar { display: none; }
+ 
+  .special-card {
+    flex: 0 0 280px;
+    background: var(--choco);
+    border-radius: 28px;
+    padding: 2rem;
+    color: var(--cream);
+    cursor: none;
+    transition: transform .25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .special-card:hover { transform: scale(1.03) rotate(-1deg); }
+  .special-card::after {
+    content: attr(data-emoji);
+    position: absolute; bottom: -10px; right: 10px;
+    font-size: 5rem; opacity: .15;
+  }
+  .special-card-tag {
+    display: inline-block;
+    background: var(--rose); color: #fff;
+    font-size: .72rem; font-weight: 500; letter-spacing: .07em; text-transform: uppercase;
+    padding: .25rem .7rem; border-radius: 100px;
+    margin-bottom: 1rem;
+  }
+  .special-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; font-weight: 700; margin-bottom: .5rem;
+  }
+  .special-card p { font-size: .88rem; color: #c5a98e; line-height: 1.6; }
+  .special-card-price {
+    margin-top: 1.5rem;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem; font-weight: 900; color: var(--lemon);
+  }
+ 
+  /* ─── TESTIMONIOS ─── */
+  .testimonials { padding: 6rem 3rem; }
+  .testi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .testi-card {
+    background: #fff;
+    border-radius: 24px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(59,31,14,.06);
+    transition: transform .25s;
+  }
+  .testi-card:hover { transform: translateY(-4px); }
+  .stars { color: var(--lemon); font-size: 1.1rem; margin-bottom: 1rem; filter: drop-shadow(0 1px 2px rgba(0,0,0,.15)); }
+  .testi-text { font-size: .95rem; color: #5a3e32; line-height: 1.7; margin-bottom: 1.5rem; font-style: italic; }
+  .testi-author { display: flex; align-items: center; gap: .8rem; }
+  .testi-avatar {
+    width: 42px; height: 42px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+  }
+  .testi-name { font-weight: 500; font-size: .9rem; }
+  .testi-loc { font-size: .78rem; color: #9a7060; }
+ 
+  /* ─── CONTACTO / FOOTER ─── */
+  footer {
+    background: var(--choco);
+    color: var(--cream);
+    padding: 5rem 3rem 2rem;
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1.5fr;
+    gap: 4rem;
+    margin-bottom: 4rem;
+  }
+  .footer-brand .logo { color: var(--cream); font-size: 1.8rem; margin-bottom: 1rem; display: flex; }
+  .footer-brand p { color: #c5a98e; font-size: .9rem; line-height: 1.7; max-width: 260px; }
+ 
+  .footer-col h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem; font-weight: 700;
+    margin-bottom: 1.2rem;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: .6rem; }
+  .footer-col ul a { color: #c5a98e; text-decoration: none; font-size: .88rem; transition: color .2s; }
+  .footer-col ul a:hover { color: var(--cream); }
+ 
+  .footer-newsletter input {
+    width: 100%; background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 12px;
+    padding: .75rem 1rem;
+    color: var(--cream); font-family: 'DM Sans', sans-serif;
+    font-size: .9rem; margin-bottom: .7rem;
+    outline: none;
+    transition: border-color .2s;
+  }
+  .footer-newsletter input::placeholder { color: #9a7060; }
+  .footer-newsletter input:focus { border-color: var(--rose); }
+  .footer-newsletter button {
+    width: 100%;
+    background: var(--rose); color: #fff;
+    border: none; border-radius: 12px;
+    padding: .75rem;
+    font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: .9rem;
+    cursor: none; transition: background .2s;
+  }
+  .footer-newsletter button:hover { background: #e04460; }
+ 
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,.1);
+    padding-top: 2rem;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: .82rem; color: #9a7060;
+  }
+  .social-icons { display: flex; gap: 1rem; }
+  .social-icons a {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: rgba(255,255,255,.08);
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; font-size: 1rem;
+    transition: background .2s, transform .15s;
+  }
+  .social-icons a:hover { background: var(--rose); transform: scale(1.1); }
+ 
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    nav ul { display: none; }
+    .hero { grid-template-columns: 1fr; text-align: center; padding: 6rem 1.5rem 3rem; }
+    .hero-sub { margin: 1.5rem auto 0; }
+    .hero-actions { justify-content: center; }
+    .hero-visual { margin-top: 3rem; }
+    .about { grid-template-columns: 1fr; padding: 4rem 1.5rem; gap: 3rem; }
+    .about-img-stack { display: none; }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .section { padding: 4rem 1.5rem; }
+    .specials { padding: 4rem 1.5rem; }
+    .testimonials { padding: 4rem 1.5rem; }
+    footer { padding: 3rem 1.5rem 1.5rem; }
+  }
+  @media (max-width: 580px) {
+    .footer-top { grid-template-columns: 1fr; }
+    .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+    .badge { display: none; }
+  }
+</style>
+</head>
+<body>
+ 
+<!-- Cursor -->
+<div class="cursor" id="cursor"></div>
+ 
+<!-- NAV -->
+<nav id="nav">
+  <a class="logo" href="#"><span class="logo-dot"></span> KRÉMO</a>
+  <ul>
+    <li><a href="#menu">Menú</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <button class="nav-btn">Pedir Ahora</button>
+</nav>
+ 
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-blob blob1"></div>
+  <div class="hero-blob blob2"></div>
+  <div class="hero-blob blob3"></div>
+ 
+  <div class="hero-text">
+    <span class="hero-tag">🍦 Heladería Artesanal · San Pedro Sula</span>
+    <h1>El sabor que<br><em>te hace feliz</em></h1>
+    <p class="hero-sub">Helados artesanales elaborados con ingredientes frescos, frutas de temporada y mucho amor. Cada bola es una sonrisa.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">Ver Menú</button>
+      <button class="btn-ghost" onclick="document.getElementById('contacto').scrollIntoView({behavior:'smooth'})">Encuéntranos</button>
+    </div>
+  </div>
+</section>
+ 
+<!-- STRIP -->
+<div class="strip">
+  <div class="strip-inner">
+    🍓 Fresa <span class="strip-sep">·</span>
+    🫐 Arándano <span class="strip-sep">·</span>
+    🍫 Chocolate Negro <span class="strip-sep">·</span>
+    🥭 Mango <span class="strip-sep">·</span>
+    🍋 Limón <span class="strip-sep">·</span>
+    🍪 Cookie & Cream <span class="strip-sep">·</span>
+    🫧 Menta <span class="strip-sep">·</span>
+    🥜 Maní <span class="strip-sep">·</span>
+    🍑 Durazno <span class="strip-sep">·</span>
+    🌺 Maracuyá <span class="strip-sep">·</span>
+    🍵 Matcha <span class="strip-sep">·</span>
+    🥥 Coco <span class="strip-sep">·</span>
+    🍓 Fresa <span class="strip-sep">·</span>
+    🫐 Arándano <span class="strip-sep">·</span>
+    🍫 Chocolate Negro <span class="strip-sep">·</span>
+    🥭 Mango <span class="strip-sep">·</span>
+    🍋 Limón <span class="strip-sep">·</span>
+    🍪 Cookie & Cream <span class="strip-sep">·</span>
+    🫧 Menta <span class="strip-sep">·</span>
+    🥜 Maní <span class="strip-sep">·</span>
+    🍑 Durazno <span class="strip-sep">·</span>
+    🌺 Maracuyá <span class="strip-sep">·</span>
+    🍵 Matcha <span class="strip-sep">·</span>
+    🥥 Coco <span class="strip-sep">·</span>
+  </div>
+</div>
+ 
+<!-- MENÚ SIN FOTOS -->
+<section class="section" id="menu">
+  <div class="section-header">
+    <p class="section-label">Nuestro Menú</p>
+    <h2 class="section-title">Sabores &amp;<br>Precios</h2>
+  </div>
+  <div style="max-width:1000px;margin:0 auto;">
+ 
+    <!-- Bolas individuales -->
+    <div class="menu-cat-title">🍦 Bolas de Helado</div>
+    <div class="menu-list">
+      <div class="menu-item"><span class="mi-name">Vainilla</span><span class="mi-dots"></span><span class="mi-price">L 35</span></div>
+      <div class="menu-item"><span class="mi-name">Chocolate</span><span class="mi-dots"></span><span class="mi-price">L 40</span></div>
+      <div class="menu-item"><span class="mi-name">Fresa</span><span class="mi-dots"></span><span class="mi-price">L 40</span></div>
+      <div class="menu-item"><span class="mi-name">Mango</span><span class="mi-dots"></span><span class="mi-price">L 45</span></div>
+      <div class="menu-item"><span class="mi-name">Maracuyá</span><span class="mi-dots"></span><span class="mi-price">L 45</span></div>
+      <div class="menu-item"><span class="mi-name">Cookie &amp; Cream</span><span class="mi-dots"></span><span class="mi-price">L 45</span></div>
+      <div class="menu-item"><span class="mi-name">Menta con Chips</span><span class="mi-dots"></span><span class="mi-price">L 45</span></div>
+      <div class="menu-item"><span class="mi-name">Coco</span><span class="mi-dots"></span><span class="mi-price">L 40</span></div>
+      <div class="menu-item"><span class="mi-name">Durazno</span><span class="mi-dots"></span><span class="mi-price">L 45</span></div>
+      <div class="menu-item"><span class="mi-name">Arándano</span><span class="mi-dots"></span><span class="mi-price">L 50</span></div>
+    </div>
+ 
+    <!-- Conos -->
+    <div class="menu-cat-title" style="margin-top:2.5rem">🍦 Conos</div>
+    <div class="menu-list">
+      <div class="menu-item"><span class="mi-name">Cono Simple (1 bola)</span><span class="mi-dots"></span><span class="mi-price">L 50</span></div>
+      <div class="menu-item"><span class="mi-name">Cono Doble (2 bolas)</span><span class="mi-dots"></span><span class="mi-price">L 85</span></div>
+      <div class="menu-item"><span class="mi-name">Cono Waffle (2 bolas)</span><span class="mi-dots"></span><span class="mi-price">L 95</span></div>
+      <div class="menu-item"><span class="mi-name">Cono Waffle Triple (3 bolas)</span><span class="mi-dots"></span><span class="mi-price">L 130</span></div>
+    </div>
+ 
+    <!-- Copas -->
+    <div class="menu-cat-title" style="margin-top:2.5rem">🍧 Copas</div>
+    <div class="menu-list">
+      <div class="menu-item"><span class="mi-name">Copa Pequeña (2 bolas)</span><span class="mi-dots"></span><span class="mi-price">L 80</span></div>
+      <div class="menu-item"><span class="mi-name">Copa KRÉMO (3 bolas + toppings)</span><span class="mi-dots"></span><span class="mi-price">L 120</span></div>
+      <div class="menu-item"><span class="mi-name">Copa Familiar (5 bolas + toppings)</span><span class="mi-dots"></span><span class="mi-price">L 190</span></div>
+      <div class="menu-item"><span class="mi-name">Sundae Especial</span><span class="mi-dots"></span><span class="mi-price">L 110</span></div>
+    </div>
+ 
+    <!-- Malteadas -->
+    <div class="menu-cat-title" style="margin-top:2.5rem">🥤 Malteadas</div>
+    <div class="menu-list">
+      <div class="menu-item"><span class="mi-name">Malteada Regular (2 bolas)</span><span class="mi-dots"></span><span class="mi-price">L 90</span></div>
+      <div class="menu-item"><span class="mi-name">Malteada Grande (3 bolas)</span><span class="mi-dots"></span><span class="mi-price">L 120</span></div>
+      <div class="menu-item"><span class="mi-name">Malteada Oreo</span><span class="mi-dots"></span><span class="mi-price">L 130</span></div>
+    </div>
+ 
+    <p style="text-align:center;margin-top:2rem;font-size:.85rem;color:#9a7060;">* Precios en Lempiras Hondureños (L). Sujetos a cambio sin previo aviso.</p>
+  </div>
+</section>
+ 
+<!-- CONTACTO / UBICACIÓN -->
+<section class="about" id="contacto">
+  <div class="about-img-stack">
+    <div class="about-img a">📍</div>
+    <div class="about-img b">🕐</div>
+    <div class="about-img c">📞</div>
+  </div>
+  <div class="about-text">
+    <p class="section-label">Encuéntranos</p>
+    <h2 class="section-title" style="color:var(--cream)">Estamos en<br>San Pedro Sula</h2>
+    <p>📍 Blvd. Morazán, Colonia Trejo, San Pedro Sula, Cortés, Honduras</p>
+    <p>📞 +504 1234-5678</p>
+    <p>🕐 Lunes a Domingo · 10:00 AM – 10:00 PM</p>
+    <p>📧 hola@kremo.hn</p>
+    <div class="stats">
+      <div>
+        <div class="stat-num">+30</div>
+        <div class="stat-label">Sabores únicos</div>
+      </div>
+      <div>
+        <div class="stat-num">L 35</div>
+        <div class="stat-label">Desde</div>
+      </div>
+      <div>
+        <div class="stat-num">SPS</div>
+        <div class="stat-label">Honduras</div>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a class="logo" href="#"><span class="logo-dot"></span> KRÉMO</a>
+      <p>Heladería artesanal en San Pedro Sula. Elaboramos cada helado con ingredientes frescos y mucho amor hondureño.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Menú</h4>
+      <ul>
+        <li><a href="#menu">Helados</a></li>
+        <li><a href="#menu">Copas</a></li>
+        <li><a href="#menu">Malteadas</a></li>
+        <li><a href="#menu">Conos</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contacto</h4>
+      <ul>
+        <li><a href="tel:+50412345678">+504 1234-5678</a></li>
+        <li><a href="mailto:hola@kremo.hn">hola@kremo.hn</a></li>
+        <li><a href="#contacto">Blvd. Morazán, Trejo</a></li>
+        <li><a href="#contacto">San Pedro Sula, Honduras</a></li>
+      </ul>
+    </div>
+    <div class="footer-col footer-newsletter">
+      <h4>¡No te pierdas nada!</h4>
+      <input type="email" placeholder="tu@email.com">
+      <button>Suscribirme 🍦</button>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 KRÉMO. TODOS LOS DERECHOS RESERVADOS.</span>
+    <div class="social-icons">
+      <a href="#" title="Instagram">📸</a>
+      <a href="#" title="Facebook">📘</a>
+      <a href="#" title="TikTok">🎵</a>
+      <a href="#" title="WhatsApp">💬</a>
+    </div>
+  </div>
+</footer>
+ 
+<!-- ═══════════════ POPUP REVIEW ═══════════════ -->
+<div id="review-overlay" style="display:none;position:fixed;inset:0;background:rgba(30,12,4,.6);z-index:2000;backdrop-filter:blur(4px);align-items:center;justify-content:center;">
+  <div id="review-box" style="background:#fff;border-radius:28px;padding:2.5rem;max-width:440px;width:90%;position:relative;transform:scale(.85);opacity:0;transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .3s;">
+    <button onclick="closeReview()" style="position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.4rem;cursor:pointer;color:#9a7060;">✕</button>
+    <div style="text-align:center;margin-bottom:1.5rem;">
+      <div style="font-size:2.5rem;margin-bottom:.5rem;">🍦</div>
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;color:#3B1F0E;margin-bottom:.4rem;">¿Cómo fue tu experiencia?</h3>
+      <p style="font-size:.88rem;color:#9a7060;">Tu opinión nos ayuda a mejorar. ¡Solo toma un momento!</p>
+    </div>
+    <!-- Estrellas -->
+    <div id="star-row" style="display:flex;justify-content:center;gap:.5rem;margin-bottom:1.5rem;font-size:2rem;">
+      <span class="rstar" data-v="1" onclick="setStars(1)" style="cursor:pointer;transition:transform .15s;">☆</span>
+      <span class="rstar" data-v="2" onclick="setStars(2)" style="cursor:pointer;transition:transform .15s;">☆</span>
+      <span class="rstar" data-v="3" onclick="setStars(3)" style="cursor:pointer;transition:transform .15s;">☆</span>
+      <span class="rstar" data-v="4" onclick="setStars(4)" style="cursor:pointer;transition:transform .15s;">☆</span>
+      <span class="rstar" data-v="5" onclick="setStars(5)" style="cursor:pointer;transition:transform .15s;">☆</span>
+    </div>
+    <textarea id="review-text" placeholder="Cuéntanos tu experiencia en KRÉMO..." style="width:100%;border:1.5px solid #e8d8c8;border-radius:14px;padding:.9rem;font-family:'DM Sans',sans-serif;font-size:.9rem;resize:none;height:100px;outline:none;color:#3B1F0E;transition:border-color .2s;" onfocus="this.style.borderColor='#F4637A'" onblur="this.style.borderColor='#e8d8c8'"></textarea>
+    <input id="review-name" type="text" placeholder="Tu nombre (opcional)" style="width:100%;border:1.5px solid #e8d8c8;border-radius:14px;padding:.75rem 1rem;font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none;margin-top:.7rem;color:#3B1F0E;transition:border-color .2s;" onfocus="this.style.borderColor='#F4637A'" onblur="this.style.borderColor='#e8d8c8'">
+    <button onclick="submitReview()" style="width:100%;margin-top:1rem;background:#F4637A;color:#fff;border:none;border-radius:14px;padding:.9rem;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;transition:background .2s,transform .15s;" onmouseover="this.style.background='#e04460'" onmouseout="this.style.background='#F4637A'">Enviar mi reseña ✨</button>
+    <div id="review-thanks" style="display:none;text-align:center;padding:1rem 0 .5rem;">
+      <div style="font-size:2rem;">🎉</div>
+      <p style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;color:#3B1F0E;margin:.4rem 0 .2rem;">¡Gracias por tu reseña!</p>
+      <p style="font-size:.85rem;color:#9a7060;">Tu opinión hace que KRÉMO sea mejor cada día.</p>
+    </div>
+  </div>
+</div>
+ 
+<!-- ═══════════════ KREMO AI ASSISTANT ═══════════════ -->
+<!-- Botón flotante -->
+<div id="ai-fab" onclick="toggleChat()" style="position:fixed;bottom:2rem;right:2rem;z-index:1500;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#F4637A,#C8A8E9);box-shadow:0 6px 24px rgba(244,99,122,.45);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .2s,box-shadow .2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+  <span id="fab-icon" style="font-size:1.6rem;">🍦</span>
+</div>
+<div id="ai-notif" style="position:fixed;bottom:5.5rem;right:2rem;z-index:1499;background:#3B1F0E;color:#fff;padding:.5rem 1rem;border-radius:100px;font-size:.82rem;font-weight:500;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.2);animation:fadeUp .5s 1s both;">¡Hola! Soy Krémo Assistant 👋</div>
+ 
+<!-- Ventana del chat -->
+<div id="ai-chat" style="display:none;position:fixed;bottom:6.5rem;right:2rem;z-index:1500;width:360px;max-width:95vw;background:#fff;border-radius:24px;box-shadow:0 20px 60px rgba(59,31,14,.2);overflow:hidden;transform:scale(.9) translateY(20px);opacity:0;transition:transform .3s cubic-bezier(.34,1.56,.64,1),opacity .25s;">
+  <!-- Header -->
+  <div style="background:linear-gradient(135deg,#F4637A,#C8A8E9);padding:1rem 1.2rem;display:flex;align-items:center;gap:.8rem;">
+    <div style="width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;">🍦</div>
+    <div>
+      <div style="font-family:'Playfair Display',serif;font-weight:700;color:#fff;font-size:1rem;">Krémo Assistant</div>
+      <div style="font-size:.75rem;color:rgba(255,255,255,.8);display:flex;align-items:center;gap:.3rem;"><span style="width:7px;height:7px;background:#4ade80;border-radius:50%;display:inline-block;"></span> En línea ahora</div>
+    </div>
+    <button onclick="toggleChat()" style="margin-left:auto;background:rgba(255,255,255,.2);border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;color:#fff;font-size:1rem;display:flex;align-items:center;justify-content:center;">✕</button>
+  </div>
+  <!-- Mensajes -->
+  <div id="chat-msgs" style="height:280px;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:.7rem;background:#FFF8EE;">
+    <div class="ai-msg bot">¡Hola! Soy <strong>Krémo Assistant</strong> 🍦 ¿En qué te puedo ayudar hoy? Puedo contarte sobre nuestros sabores, precios, ubicación o cualquier cosa de KRÉMO.</div>
+  </div>
+  <!-- Input -->
+  <div style="padding:.8rem;border-top:1px solid #f0e8e0;display:flex;gap:.6rem;background:#fff;">
+    <input id="chat-input" type="text" placeholder="Escribe tu pregunta..." onkeydown="if(event.key==='Enter')sendMsg()" style="flex:1;border:1.5px solid #e8d8c8;border-radius:100px;padding:.55rem 1rem;font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;color:#3B1F0E;" onfocus="this.style.borderColor='#F4637A'" onblur="this.style.borderColor='#e8d8c8'">
+    <button onclick="sendMsg()" style="background:#F4637A;color:#fff;border:none;border-radius:50%;width:38px;height:38px;font-size:1.1rem;cursor:pointer;flex-shrink:0;transition:background .2s;" onmouseover="this.style.background='#e04460'" onmouseout="this.style.background='#F4637A'">➤</button>
+  </div>
+</div>
+ 
+<style>
+  /* ─── MENÚ LIST ─── */
+  .menu-cat-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem; font-weight: 700;
+    color: var(--choco);
+    border-bottom: 2px solid var(--rose);
+    padding-bottom: .5rem;
+    margin-bottom: 1rem;
+  }
+  .menu-list { display: flex; flex-direction: column; gap: .5rem; }
+  .menu-item {
+    display: flex; align-items: baseline; gap: .4rem;
+    padding: .6rem .8rem;
+    border-radius: 12px;
+    transition: background .2s;
+  }
+  .menu-item:hover { background: rgba(244,99,122,.06); }
+  .mi-name { font-size: .95rem; font-weight: 500; color: var(--choco); white-space: nowrap; }
+  .mi-dots { flex: 1; border-bottom: 2px dotted #d4c0b0; margin: 0 .5rem; min-width: 20px; }
+  .mi-price { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1rem; color: var(--rose); white-space: nowrap; }
+ 
+  /* ─── CHAT BUBBLES ─── */
+  .ai-msg {
+    max-width: 85%; padding: .65rem 1rem;
+    border-radius: 18px; font-size: .88rem; line-height: 1.55;
+    animation: fadeUp .3s both;
+  }
+  .ai-msg.bot { background: #fff; color: #3B1F0E; border-bottom-left-radius: 4px; box-shadow: 0 2px 8px rgba(59,31,14,.08); align-self: flex-start; }
+  .ai-msg.user { background: #F4637A; color: #fff; border-bottom-right-radius: 4px; align-self: flex-end; }
+  .ai-msg.typing { background: #fff; color: #9a7060; align-self: flex-start; font-style: italic; }
+</style>
+ 
+<script>
+  const cursor = document.getElementById('cursor');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('big'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
+  });
+ 
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 60));
+ 
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        entry.target.style.transitionDelay = (i * 0.06) + 's';
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.menu-item').forEach(el => {
+    el.style.opacity = '0'; el.style.transform = 'translateY(16px)';
+    el.style.transition = 'opacity .4s, transform .4s, background .2s';
+    observer.observe(el);
+  });
+ 
+  /* ─── POPUP REVIEW ─── */
+  let starVal = 0;
+  setTimeout(() => {
+    const ov = document.getElementById('review-overlay');
+    ov.style.display = 'flex';
+    requestAnimationFrame(() => {
+      const box = document.getElementById('review-box');
+      box.style.transform = 'scale(1)';
+      box.style.opacity = '1';
+    });
+  }, 5000);
+ 
+  function closeReview() {
+    const ov = document.getElementById('review-overlay');
+    const box = document.getElementById('review-box');
+    box.style.transform = 'scale(.85)'; box.style.opacity = '0';
+    setTimeout(() => ov.style.display = 'none', 300);
+  }
+ 
+  function setStars(n) {
+    starVal = n;
+    document.querySelectorAll('.rstar').forEach((s, i) => {
+      s.textContent = i < n ? '★' : '☆';
+      s.style.color = i < n ? '#F9D949' : '#ccc';
+      s.style.transform = i < n ? 'scale(1.2)' : 'scale(1)';
+    });
+  }
+ 
+  function submitReview() {
+    if (!starVal) { alert('Por favor selecciona una calificación ⭐'); return; }
+    document.querySelector('#review-box textarea').style.display = 'none';
+    document.querySelector('#review-box input[type=text]').style.display = 'none';
+    document.querySelector('#review-box button:last-of-type').style.display = 'none';
+    document.getElementById('review-thanks').style.display = 'block';
+    setTimeout(closeReview, 2500);
+  }
+ 
+  /* ─── AI CHAT ─── */
+  let chatOpen = false;
+  setTimeout(() => {
+    const notif = document.getElementById('ai-notif');
+    if (notif) setTimeout(() => notif.style.opacity = '0', 4000);
+  }, 1000);
+ 
+  function toggleChat() {
+    chatOpen = !chatOpen;
+    const chat = document.getElementById('ai-chat');
+    const icon = document.getElementById('fab-icon');
+    if (chatOpen) {
+      chat.style.display = 'flex';
+      chat.style.flexDirection = 'column';
+      requestAnimationFrame(() => { chat.style.transform = 'scale(1) translateY(0)'; chat.style.opacity = '1'; });
+      icon.textContent = '✕';
+      document.getElementById('ai-notif').style.display = 'none';
+    } else {
+      chat.style.transform = 'scale(.9) translateY(20px)'; chat.style.opacity = '0';
+      setTimeout(() => chat.style.display = 'none', 280);
+      icon.textContent = '🍦';
+    }
+  }
+ 
+  const KREMO_CONTEXT = `Eres Krémo Assistant, el asistente virtual de KRÉMO Heladería Artesanal ubicada en Blvd. Morazán, Colonia Trejo, San Pedro Sula, Honduras.
+Responde SIEMPRE en español, de forma amigable, breve y con emojis de helado cuando encaje.
+Información clave:
+- Teléfono: +504 1234-5678
+- Email: hola@kremo.hn
+- Horario: Lunes a Domingo 10:00 AM – 10:00 PM
+- Precios: Bolas desde L 35 (vainilla), L 40 (chocolate, fresa, coco), L 45 (mango, maracuyá, cookie & cream, menta, durazno), L 50 (arándano)
+- Conos: Simple L 50, Doble L 85, Waffle L 95, Waffle Triple L 130
+- Copas: Pequeña L 80, Copa KRÉMO L 120, Familiar L 190, Sundae L 110
+- Malteadas: Regular L 90, Grande L 120, Oreo L 130
+- Más de 30 sabores artesanales, sin conservantes artificiales
+Si no sabes algo, recomienda llamar al +504 1234-5678.`;
+ 
+  let chatHistory = [];
+ 
+  async function sendMsg() {
+    const input = document.getElementById('chat-input');
+    const text = input.value.trim();
+    if (!text) return;
+    input.value = '';
+    addMsg(text, 'user');
+    chatHistory.push({ role: 'user', content: text });
+ 
+    const typing = addMsg('Escribiendo...', 'typing');
+ 
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          system: KREMO_CONTEXT,
+          messages: chatHistory
+        })
+      });
+      const data = await res.json();
+      const reply = data.content?.map(b => b.text || '').join('') || 'Lo siento, intenta de nuevo 🍦';
+      typing.remove();
+      addMsg(reply, 'bot');
+      chatHistory.push({ role: 'assistant', content: reply });
+    } catch(e) {
+      typing.remove();
+      addMsg('Ups, algo falló. Llámanos al +504 1234-5678 🍦', 'bot');
+    }
+  }
+ 
+  function addMsg(text, type) {
+    const msgs = document.getElementById('chat-msgs');
+    const div = document.createElement('div');
+    div.className = `ai-msg ${type}`;
+    div.innerHTML = text;
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+    return div;
+  }
+</script>
+</body>
+</html>
+ 
